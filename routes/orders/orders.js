@@ -1,10 +1,10 @@
-const express = require("express");
-const router = express.Router();
-const auth = require("../../middleware/auth");
-const { check, validationResult } = require("express-validator");
-const moment = require("moment");
+import express from "express";
+import auth from "../../middleware/auth.js";
+import { check, validationResult } from "express-validator";
+import moment from "moment";
+import Order from "../../models/Order.js";
 
-const Order = require("../../models/Order");
+const router = express.Router();
 
 // @route       POST /api/orders
 // @desc        Get all orders
@@ -138,4 +138,4 @@ router.patch("/:orderID", [auth], async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

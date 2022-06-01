@@ -1,13 +1,15 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 
-module.exports = function (req, res, next) {
+const { verify } = jwt;
+
+export default function (req, res, next) {
   const token = req.header("auth-token");
 
   if (!token) {
     res.status(400).json({ msg: "No token found. Access denied." });
   } else {
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const decoded = verify(token, process.env.JWT_SECRET);
 
       req.user = decoded.user;
       next();
@@ -17,4 +19,4 @@ module.exports = function (req, res, next) {
         .json({ msg: "Authentication failed. Please login and try again." });
     }
   }
-};
+}

@@ -1,5 +1,5 @@
-const { Decimal128 } = require("mongodb");
-const mongoose = require("mongoose");
+import { Decimal128 } from "mongodb";
+import mongoose from "mongoose";
 
 const ProductSchema = new mongoose.Schema({
   image: {
@@ -31,4 +31,5 @@ const ProductSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("product", ProductSchema);
+const Product = mongoose.model("Product", ProductSchema);
+export default Product;

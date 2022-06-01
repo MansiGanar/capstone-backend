@@ -1,11 +1,11 @@
-const express = require("express");
-const router = express.Router();
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const auth = require("../../middleware/auth");
-const { check, validationResult } = require("express-validator");
+import { Router } from "express";
+import { compare } from "bcryptjs";
+import { sign } from "jsonwebtoken";
+import auth from "../../middleware/auth";
+import { check, validationResult } from "express-validator";
+import User from "../../models/User.js";
 
-const User = require("../../models/User");
+const router = Router.express();
 
 // @route       GET /api/auth
 // @desc        Get logged in user
@@ -47,7 +47,7 @@ router.post(
       let user = await User.findOne({ email: email });
 
       if (user) {
-        let isMatch = await bcrypt.compare(password, user.password);
+        let isMatch = await compare(password, user.password);
 
         if (!isMatch) {
           res.status(400).json({ msg: "Invalid credentials." });
@@ -59,7 +59,7 @@ router.post(
           },
         };
 
-        jwt.sign(
+        sign(
           payload,
           process.env.JWT_SECRET,
           {
@@ -82,4 +82,4 @@ router.post(
   }
 );
 
-module.exports = router;
+export default router;

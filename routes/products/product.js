@@ -1,8 +1,8 @@
-const express = require("express");
-const router = express.Router();
-const { check, validationResult } = require("express-validator");
+import Product from "../../models/Product.js";
+import express from "express";
+import { check, validationResult } from "express-validator";
 
-const Product = require("../../models/Product");
+const router = express.Router();
 
 // @route       GET /api/products
 // @desc        Get all propducts
@@ -128,4 +128,4 @@ router.delete("/:productID", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

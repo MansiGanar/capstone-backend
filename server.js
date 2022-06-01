@@ -1,11 +1,14 @@
-require("dotenv").config();
-
-const express = require("express");
-const connectDB = require("./database/db");
-const cors = require("cors");
-const listEndpoints = require("express-list-endpoints");
+import express, { json } from "express";
+import connectDB from "./database/db.js";
+import cors from "cors";
+import listEndpoints from "express-list-endpoints";
+import user from "./routes/user/user.js";
+import auth from "./routes/products/product.js";
+import products from "./routes/products/product.js";
+import orders from "./routes/orders/orders.js";
 
 const app = express();
+app.use(express.json());
 
 // Connect to database
 connectDB();
@@ -21,13 +24,14 @@ app.use(
 );
 
 // Initialize middleware
-app.use(express.json({ extended: false }));
+app.use(json({ extended: false }));
 
 // Define Routes
-app.use("/api/users", require("./routes/user/user"));
-app.use("/api/auth", require("./routes/auth/auth"));
-app.use("/api/products", require("./routes/products/product"));
-app.use("/api/orders", require("./routes/orders/orders"));
+
+app.use("/api/users", user);
+app.use("/api/auth", auth);
+app.use("/api/products", products);
+app.use("/api/orders", orders);
 
 const PORT = process.env.PORT || 5000;
 
