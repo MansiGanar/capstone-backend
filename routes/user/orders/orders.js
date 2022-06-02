@@ -1,12 +1,12 @@
 import express from "express";
-import auth from "../../middleware/auth.js";
+import auth from "../../../middleware/auth.js";
 import { check, validationResult } from "express-validator";
 import moment from "moment";
-import Order from "../../models/Order.js";
+import Order from "../../../models/Order.js";
 
 const router = express.Router();
 
-// @route       POST /api/orders
+// @route       POST /api/user/orders
 // @desc        Get all orders
 // @access      Private
 router.get("/", [auth], async (req, res) => {
@@ -27,7 +27,7 @@ router.get("/", [auth], async (req, res) => {
   }
 });
 
-// @route       POST /api/orders
+// @route       POST /api/user/orders
 // @desc        Place an order
 // @access      Private
 router.post(
@@ -90,7 +90,7 @@ router.post(
   }
 );
 
-// @route       GET /api/orders/orderID
+// @route       GET /api/user/orders/:orderID
 // @desc        Get an order
 // @access      Private
 router.get("/:orderID", [auth], async (req, res) => {
@@ -111,7 +111,7 @@ router.get("/:orderID", [auth], async (req, res) => {
   }
 });
 
-// @route       PATCH /api/orders/orderID
+// @route       PATCH /api/user/orders/:orderID
 // @desc        Cancel an order
 // @access      Private
 router.patch("/:orderID", [auth], async (req, res) => {

@@ -1,10 +1,11 @@
-import Product from "../../models/Product.js";
+import Product from "../../../models/Product.js";
 import express from "express";
 import { check, validationResult } from "express-validator";
+import auth from "../../../middleware/auth.js";
 
 const router = express.Router();
 
-// @route       GET /api/products
+// @route       GET /api/administrator/products
 // @desc        Get all propducts
 // @access      Public
 router.get("/", async (req, res) => {
@@ -28,7 +29,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// @route       POST /api/products
+// @route       POST /api/administrator/products
 // @desc        Add a new product
 // @access      Public
 router.post(
@@ -82,7 +83,7 @@ router.post(
   }
 );
 
-// @route       GET /api/products/productID
+// @route       GET /api/administrator/products/:productID
 // @desc        Get a product
 // @access      Public
 router.get("/:productID", async (req, res) => {
@@ -103,8 +104,8 @@ router.get("/:productID", async (req, res) => {
   }
 });
 
-// @route       GET /api/products/productID
-// @desc        Get a product
+// @route       DELETE /api/administrator/products/:productID
+// @desc        Remove a product
 // @access      Public
 router.delete("/:productID", async (req, res) => {
   const { productID } = req.params;
@@ -127,5 +128,63 @@ router.delete("/:productID", async (req, res) => {
       .json({ msg: "Failed to remove the product. Please try again." });
   }
 });
+
+// @route       PATCH /api/users/edit/:productID
+// @desc        Edit product information
+// @access      Private
+router.patch(
+  "/edit/:productID",
+  [
+    auth,
+    [
+      check("name", "Please enter a name.").exists(),
+      check("quantity", "Please enter a quantity.").exists(),
+      check("price", "Please enter a price.").exists(),
+      check("description", "Please enter a description.").exists(),
+      check("image", "Please enter a image.").exists(),
+      check("rating", "Please enter a rating.").exists(),
+      check("category", "Please enter a category.").exists(),
+    ],
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { name, quantity, price, description, image, rating, category } =
+      req.body;
+
+    try {
+      let product = await Product.findById(req.params.productID);
+
+      if (!product) {
+        res.status(400).json({ msg: "Product not found." });
+      } else {
+        product = await Product.findByIdAndUpdate(
+          req.params.productID,
+          {
+            $set: {
+              name,
+              quantity,
+              price,
+              description,
+              image,
+              rating,
+              category,
+            },
+          },
+          { new: true }
+        );
+
+        res.json(product);
+      }
+    } catch (error) {
+      res
+        .status(400)
+        .json({ msg: "Failed to update the product. Please try again." });
+    }
+  }
+);
 
 export default router;

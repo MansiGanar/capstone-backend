@@ -1,14 +1,13 @@
 import express from "express";
-import User from "../../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import auth from "../../middleware/auth.js";
 import { check, validationResult } from "express-validator";
+import Administrator from "../../models/Administrator.js";
 
 const router = express.Router();
 const { sign } = jwt;
 
-// @route       POST /api/users/register
+// @route       POST /api/administrator/register
 // @desc        Register a user
 // @access      Public
 router.post(
@@ -31,12 +30,12 @@ router.post(
     const { firstName, lastName, email, password } = req.body;
 
     try {
-      let userExists = await User.findOne({ email: email });
+      let adminExists = await Administrator.findOne({ email: email });
 
-      if (userExists) {
-        res.status(400).json({ msg: "User already exists." });
+      if (adminExists) {
+        res.status(400).json({ msg: "Administrator already exists." });
       } else {
-        let user = new User({
+        let administrator = new Administrator({
           firstName: firstName,
           lastName: lastName,
           email: email,
@@ -45,13 +44,13 @@ router.post(
 
         const salt = await bcrypt.genSalt(10);
 
-        user.password = await bcrypt.hash(password, salt);
+        administrator.password = await bcrypt.hash(password, salt);
 
-        await user.save();
+        await administrator.save();
 
         const payload = {
-          user: {
-            id: user.id,
+          administrator: {
+            id: administrator.id,
           },
         };
 
@@ -71,76 +70,15 @@ router.post(
         );
       }
     } catch (error) {
-      res
-        .status(400)
-        .json({ msg: "Failed to create a new account. Please try again." });
+      res.status(400).json({
+        msg: "Failed to create a new administrator account. Please try again.",
+      });
     }
   }
 );
 
-// @route       PATCH /api/users/edit/:userID
-// @desc        Edit personal information
-// @access      Private
-router.patch(
-  "/edit/:userID",
-  [
-    auth,
-    [
-      check("firstName", "Please enter your first name.").notEmpty(),
-      check("lastName", "Please enter your last name.").notEmpty(),
-    ],
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    const { firstName, lastName } = req.body;
-
-    try {
-      let user = await User.findById(req.params.userID);
-
-      if (!user) {
-        res.status(400).json({ msg: "User not found." });
-      } else {
-        user = await User.findByIdAndUpdate(
-          req.params.userID,
-          { $set: { firstName: firstName, lastName: lastName } },
-          { new: true }
-        ).select("-password");
-
-        res.json(user);
-      }
-    } catch (error) {
-      res
-        .status(400)
-        .json({ msg: "Failed to update the profile. Please try again." });
-    }
-  }
-);
-
-// @route       GET /api/users/profile
-// @desc        Get logged in user
-// @access      Private
-router.get("/profile", auth, async (req, res) => {
-  try {
-    const user = await User.findById(req.params.userID).select("-password");
-
-    if (user) {
-      res.json(user);
-    } else {
-      res
-        .status(400)
-        .json({ msg: "Failed to load profile. Please try again." });
-    }
-  } catch (error) {
-    res.status(400).json({ msg: "Failed to load profile. Please try again." });
-  }
-});
-
-// @route       POST /api/users/login
-// @desc        Auth user and get token (login user)
+// @route       POST /api/administrator/login
+// @desc        Auth administrator and get token (login administrator)
 // @access      Public
 router.post(
   "/login",
@@ -157,18 +95,18 @@ router.post(
     const { email, password } = req.body;
 
     try {
-      let user = await User.findOne({ email: email });
+      let administrator = await Administrator.findOne({ email: email });
 
-      if (user) {
-        let isMatch = await compare(password, user.password);
+      if (administrator) {
+        let isMatch = await compare(password, administrator.password);
 
         if (!isMatch) {
           res.status(400).json({ msg: "Invalid credentials." });
         }
 
         const payload = {
-          user: {
-            id: user.id,
+          administrator: {
+            id: administrator.id,
           },
         };
 

@@ -1,11 +1,14 @@
+import "dotenv/config";
 import express, { json } from "express";
 import connectDB from "./database/db.js";
 import cors from "cors";
 import listEndpoints from "express-list-endpoints";
 import user from "./routes/user/user.js";
-import auth from "./routes/products/product.js";
-import products from "./routes/products/product.js";
-import orders from "./routes/orders/orders.js";
+import ordersUser from "./routes/user/orders/orders.js";
+import productsAdmin from "./routes/administrator/products/product.js";
+import administrator from "./routes/administrator/administrator.js";
+import ordersAdmin from "./routes/administrator/orders/orders.js";
+import productsUser from "./routes/user/products/products.js";
 
 const app = express();
 app.use(express.json());
@@ -29,9 +32,12 @@ app.use(json({ extended: false }));
 // Define Routes
 
 app.use("/api/users", user);
-app.use("/api/auth", auth);
-app.use("/api/products", products);
-app.use("/api/orders", orders);
+app.use("/api/users/products", productsUser);
+app.use("/api/user/orders", ordersUser);
+
+app.use("/api/administrator", administrator);
+app.use("/api/administrator/products", productsAdmin);
+app.use("/api/administrator/orders", ordersAdmin);
 
 const PORT = process.env.PORT || 5000;
 
