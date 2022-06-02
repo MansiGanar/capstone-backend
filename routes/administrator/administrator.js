@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { check, validationResult } from "express-validator";
 import Administrator from "../../models/Administrator.js";
+import auth from "../../middleware/auth.js";
 
 const router = express.Router();
 const { sign } = jwt;
@@ -132,5 +133,26 @@ router.post(
     }
   }
 );
+
+// @route       GET /api/administrator/profile
+// @desc        Get logged in administrator
+// @access      Private
+router.get("/profile", auth, async (req, res) => {
+  try {
+    const administrator = await Administrator.findById(
+      req.params.userID
+    ).select("-password");
+
+    if (administrator) {
+      res.json(administrator);
+    } else {
+      res
+        .status(400)
+        .json({ msg: "Failed to load profile. Please try again." });
+    }
+  } catch (error) {
+    res.status(400).json({ msg: "Failed to load profile. Please try again." });
+  }
+});
 
 export default router;
