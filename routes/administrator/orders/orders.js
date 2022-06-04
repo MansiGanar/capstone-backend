@@ -4,12 +4,10 @@ import Order from "../../../models/Order.js";
 
 const router = express.Router();
 
-// @route       POST /api/administrator/orders
+// @route       GET /api/administrator/orders/all
 // @desc        Get all orders
 // @access      Private
-router.get("/", [auth], async (req, res) => {
-  const { email } = req.body;
-
+router.get("/all", auth, async (req, res) => {
   try {
     let orders = await Order.find();
     res.json(orders);
@@ -23,7 +21,7 @@ router.get("/", [auth], async (req, res) => {
 // @route       GET /api/administrator/orders/:orderID
 // @desc        Get an order
 // @access      Private
-router.get("/:orderID", [auth], async (req, res) => {
+router.get("/:orderID", auth, async (req, res) => {
   const { orderID } = req.params;
 
   try {

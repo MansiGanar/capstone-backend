@@ -11,7 +11,7 @@ export default function (req, res, next) {
     try {
       const decoded = verify(token, process.env.JWT_SECRET);
 
-      req.user = decoded.user;
+      req.user = decoded.user || decoded.administrator;
       next();
     } catch (error) {
       res

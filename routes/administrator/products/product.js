@@ -5,10 +5,10 @@ import auth from "../../../middleware/auth.js";
 
 const router = express.Router();
 
-// @route       GET /api/administrator/products
+// @route       GET /api/administrator/products/all
 // @desc        Get all propducts
-// @access      Public
-router.get("/", async (req, res) => {
+// @access      Private
+router.get("/all", auth, async (req, res) => {
   try {
     let products = await Product.find();
 
@@ -31,10 +31,11 @@ router.get("/", async (req, res) => {
 
 // @route       POST /api/administrator/products
 // @desc        Add a new product
-// @access      Public
+// @access      Private
 router.post(
   "/",
   [
+    auth,
     check("name", "Please enter a name.").exists(),
     check("quantity", "Please enter a quantity.").exists(),
     check("price", "Please enter a price.").exists(),
@@ -85,8 +86,8 @@ router.post(
 
 // @route       GET /api/administrator/products/:productID
 // @desc        Get a product
-// @access      Public
-router.get("/:productID", async (req, res) => {
+// @access      Private
+router.get("/:productID", auth, async (req, res) => {
   const { productID } = req.params;
 
   try {
@@ -106,8 +107,8 @@ router.get("/:productID", async (req, res) => {
 
 // @route       DELETE /api/administrator/products/:productID
 // @desc        Remove a product
-// @access      Public
-router.delete("/:productID", async (req, res) => {
+// @access      Private
+router.delete("/:productID", auth, async (req, res) => {
   const { productID } = req.params;
 
   try {
@@ -129,22 +130,20 @@ router.delete("/:productID", async (req, res) => {
   }
 });
 
-// @route       PATCH /api/users/edit/:productID
+// @route       PATCH /api/administrator/products/edit/:productID
 // @desc        Edit product information
 // @access      Private
 router.patch(
   "/edit/:productID",
   [
     auth,
-    [
-      check("name", "Please enter a name.").exists(),
-      check("quantity", "Please enter a quantity.").exists(),
-      check("price", "Please enter a price.").exists(),
-      check("description", "Please enter a description.").exists(),
-      check("image", "Please enter a image.").exists(),
-      check("rating", "Please enter a rating.").exists(),
-      check("category", "Please enter a category.").exists(),
-    ],
+    check("name", "Please enter a name.").exists(),
+    check("quantity", "Please enter a quantity.").exists(),
+    check("price", "Please enter a price.").exists(),
+    check("description", "Please enter a description.").exists(),
+    check("image", "Please enter a image.").exists(),
+    check("rating", "Please enter a rating.").exists(),
+    check("category", "Please enter a category.").exists(),
   ],
   async (req, res) => {
     const errors = validationResult(req);

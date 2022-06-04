@@ -125,7 +125,7 @@ router.patch(
 // @access      Private
 router.get("/profile", auth, async (req, res) => {
   try {
-    const user = await User.findById(req.params.userID).select("-password");
+    const user = await User.findById(req.user.id).select("-password");
 
     if (user) {
       res.json(user);
@@ -160,7 +160,7 @@ router.post(
       let user = await User.findOne({ email: email });
 
       if (user) {
-        let isMatch = await compare(password, user.password);
+        let isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
           res.status(400).json({ msg: "Invalid credentials." });

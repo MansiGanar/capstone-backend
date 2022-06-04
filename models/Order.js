@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import mongoose from "mongoose";
 
 const OrderSchema = new mongoose.Schema({
@@ -32,6 +33,10 @@ const OrderSchema = new mongoose.Schema({
   orderItems: { type: Array, required: true },
   date: { type: String, required: true },
   status: { type: String, required: true, default: "In progress" },
+  userId: {
+    type: ObjectId,
+    required: true,
+  },
 });
 
 const Order = mongoose.model("Order", OrderSchema);

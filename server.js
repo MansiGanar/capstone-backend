@@ -33,7 +33,7 @@ app.use(json({ extended: false }));
 
 app.use("/api/users", user);
 app.use("/api/users/products", productsUser);
-app.use("/api/user/orders", ordersUser);
+app.use("/api/users/orders", ordersUser);
 
 app.use("/api/administrator", administrator);
 app.use("/api/administrator/products", productsAdmin);

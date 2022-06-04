@@ -99,7 +99,7 @@ router.post(
       let administrator = await Administrator.findOne({ email: email });
 
       if (administrator) {
-        let isMatch = await compare(password, administrator.password);
+        let isMatch = await bcrypt.compare(password, administrator.password);
 
         if (!isMatch) {
           res.status(400).json({ msg: "Invalid credentials." });
@@ -139,9 +139,9 @@ router.post(
 // @access      Private
 router.get("/profile", auth, async (req, res) => {
   try {
-    const administrator = await Administrator.findById(
-      req.params.userID
-    ).select("-password");
+    const administrator = await Administrator.findById(req.user.id).select(
+      "-password"
+    );
 
     if (administrator) {
       res.json(administrator);

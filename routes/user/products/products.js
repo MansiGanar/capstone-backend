@@ -3,10 +3,10 @@ import express from "express";
 
 const router = express.Router();
 
-// @route       GET /api/users/products/:category
+// @route       GET /api/users/products/category/:category
 // @desc        Get all propducts
 // @access      Public
-router.get("/:category", async (req, res) => {
+router.get("/category/:category", async (req, res) => {
   try {
     let products = await Product.find({ category: [req.params.category] });
 
@@ -27,10 +27,10 @@ router.get("/:category", async (req, res) => {
   }
 });
 
-// @route       GET /api/users/products/:productID
+// @route       GET /api/users/products/product/:productID
 // @desc        Get a product
 // @access      Public
-router.get("/:productID", async (req, res) => {
+router.get("/product/:productID", async (req, res) => {
   const { productID } = req.params;
 
   try {

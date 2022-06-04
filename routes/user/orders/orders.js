@@ -6,16 +6,14 @@ import Order from "../../../models/Order.js";
 
 const router = express.Router();
 
-// @route       POST /api/user/orders
+// @route       GET /api/users/orders/all
 // @desc        Get all orders
 // @access      Private
-router.get("/", [auth], async (req, res) => {
-  const { email } = req.body;
-
+router.get("/all", auth, async (req, res) => {
   try {
-    let orders = await Order.find({ email: email });
+    let orders = await Order.find({ userId: req.user.id });
 
-    if (orders.length <= 0) {
+    if (!orders) {
       res.status(400).json({ msg: "You haven't placed any orders yet." });
     } else {
       res.json(orders);
@@ -27,7 +25,7 @@ router.get("/", [auth], async (req, res) => {
   }
 });
 
-// @route       POST /api/user/orders
+// @route       POST /api/users/orders
 // @desc        Place an order
 // @access      Private
 router.post(
@@ -74,6 +72,7 @@ router.post(
         orderItems,
         date: now,
         status: "In progress",
+        userId: req.user.id,
       });
 
       await order.save();
@@ -90,7 +89,7 @@ router.post(
   }
 );
 
-// @route       GET /api/user/orders/:orderID
+// @route       GET /api/users/orders/:orderID
 // @desc        Get an order
 // @access      Private
 router.get("/:orderID", [auth], async (req, res) => {
@@ -111,7 +110,7 @@ router.get("/:orderID", [auth], async (req, res) => {
   }
 });
 
-// @route       PATCH /api/user/orders/:orderID
+// @route       PATCH /api/users/orders/:orderID
 // @desc        Cancel an order
 // @access      Private
 router.patch("/:orderID", [auth], async (req, res) => {
