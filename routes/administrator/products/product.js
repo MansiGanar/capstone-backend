@@ -2,6 +2,7 @@ import Product from "../../../models/Product.js";
 import express from "express";
 import { check, validationResult } from "express-validator";
 import auth from "../../../middleware/auth.js";
+import cloudinary, { multerUploads } from "../../../utils/uploads/index.js";
 
 const router = express.Router();
 
@@ -36,11 +37,11 @@ router.post(
   "/",
   [
     auth,
+    multerUploads.single("image"),
     check("name", "Please enter a name.").exists(),
     check("quantity", "Please enter a quantity.").exists(),
     check("price", "Please enter a price.").exists(),
     check("description", "Please enter a description.").exists(),
-    check("image", "Please enter a image.").exists(),
     check("rating", "Please enter a rating.").exists(),
     check("category", "Please enter a category.").exists(),
   ],
@@ -50,21 +51,22 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, quantity, price, description, image, rating, category } =
-      req.body;
+    const { name, quantity, price, description, rating, category } = req.body;
 
     try {
       let productExists = await Product.findOne({ name: name });
 
       if (productExists) {
-        res.status(400).json({ msg: "An error occurred. Please try again." });
+        res.status(400).json({ msg: "This product already exists." });
       } else {
+        const result = await cloudinary.uploader.upload(req.file.path);
+
         let product = new Product({
           name,
           quantity,
           price,
           description,
-          image,
+          image: result.secure_url,
           rating,
           category,
         });

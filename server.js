@@ -17,6 +17,7 @@ app.use(express.json());
 connectDB();
 
 // Enable CORS
+
 app.use(
   cors({
     origin: "*",
