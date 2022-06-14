@@ -4,6 +4,8 @@ import multer from "multer";
 
 import { v2 as cloudinary } from "cloudinary";
 
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+
 const { CLOUDINARY_NAME, CLOUDINARY_KEY, CLOUDINARY_SECRET } = process.env;
 
 cloudinary.config({
@@ -12,8 +14,12 @@ cloudinary.config({
   api_secret: CLOUDINARY_SECRET,
 });
 
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+});
+
 export const multerUploads = multer({
-  storage: multer.diskStorage({}),
+  storage,
   filename: function (req, file, cb) {
     cb(
       null,

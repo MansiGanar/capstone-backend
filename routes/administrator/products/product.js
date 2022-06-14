@@ -2,7 +2,7 @@ import Product from "../../../models/Product.js";
 import express from "express";
 import { check, validationResult } from "express-validator";
 import auth from "../../../middleware/auth.js";
-import cloudinary, { multerUploads } from "../../../utils/uploads/index.js";
+import { multerUploads } from "../../../utils/uploads/index.js";
 
 const router = express.Router();
 
@@ -59,14 +59,12 @@ router.post(
       if (productExists) {
         res.status(400).json({ msg: "This product already exists." });
       } else {
-        const result = await cloudinary.uploader.upload(req.file.path);
-
         let product = new Product({
           name,
           quantity,
           price,
           description,
-          image: result.secure_url,
+          image: req.file.path,
           rating,
           category,
         });
