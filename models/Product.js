@@ -7,7 +7,7 @@ const ProductSchema = new mongoose.Schema({
     required: true,
   },
   quantity: {
-    type: Number,
+    type: String,
     required: true,
   },
   name: {
@@ -19,14 +19,14 @@ const ProductSchema = new mongoose.Schema({
     required: true,
   },
   price: {
-    type: Decimal128,
+    type: String,
     required: true,
   },
   rating: {
     type: String,
   },
   category: {
-    type: [String],
+    type: String,
     required: true,
   },
 });
