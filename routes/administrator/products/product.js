@@ -77,6 +77,7 @@ router.post(
         });
       }
     } catch (error) {
+      console.log(error);
       res
         .status(400)
         .json({ msg: "Failed to add a new product. Please try again." });
