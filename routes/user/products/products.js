@@ -4,11 +4,11 @@ import express from "express";
 const router = express.Router();
 
 // @route       GET /api/users/products/category/:category
-// @desc        Get all propducts
+// @desc        Get all products in this category
 // @access      Public
 router.get("/category/:category", async (req, res) => {
   try {
-    let products = await Product.find({ category: [req.params.category] });
+    let products = await Product.find({ category: req.params.category });
 
     if (!products) {
       res

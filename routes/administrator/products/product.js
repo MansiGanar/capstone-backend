@@ -6,6 +6,30 @@ import { multerUploads } from "../../../utils/uploads/index.js";
 
 const router = express.Router();
 
+// @route       GET /api/administrator/products/category/:category
+// @desc        Get all products in this category
+// @access      Public
+router.get("/category/:category", async (req, res) => {
+  try {
+    let products = await Product.find({ category: req.params.category });
+
+    if (!products) {
+      res
+        .status(400)
+        .json({ msg: "An error occurred. Please refresh the page." });
+    } else {
+      res.json({
+        msg: "All products fetched successfully.",
+        products,
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      msg: "Failed to fetch all products. Please refresh the page.",
+    });
+  }
+});
+
 // @route       GET /api/administrator/products/all
 // @desc        Get all propducts
 // @access      Private
