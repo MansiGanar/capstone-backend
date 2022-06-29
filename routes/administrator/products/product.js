@@ -161,12 +161,11 @@ router.patch(
   "/edit/:productID",
   [
     auth,
+    multerUploads.single("image"),
     check("name", "Please enter a name.").exists(),
     check("quantity", "Please enter a quantity.").exists(),
     check("price", "Please enter a price.").exists(),
     check("description", "Please enter a description.").exists(),
-    check("image", "Please enter a image.").exists(),
-    check("rating", "Please enter a rating.").exists(),
     check("category", "Please enter a category.").exists(),
   ],
   async (req, res) => {
@@ -175,8 +174,7 @@ router.patch(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, quantity, price, description, image, rating, category } =
-      req.body;
+    const { name, quantity, price, description, category } = req.body;
 
     try {
       let product = await Product.findById(req.params.productID);
@@ -192,8 +190,7 @@ router.patch(
               quantity,
               price,
               description,
-              image,
-              rating,
+              image: req.file.path,
               category,
             },
           },
