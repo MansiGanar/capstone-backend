@@ -190,7 +190,7 @@ router.patch(
               quantity,
               price,
               description,
-              image: req.file.path,
+              image: req.file ? req.file.path : product.image,
               category,
             },
           },
