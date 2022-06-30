@@ -78,7 +78,7 @@ router.post(
       await order.save();
 
       res.json({
-        msg: "Your order has been placed successfully.",
+        msg: "Your order has been placed.",
         order,
       });
     } catch (error) {
@@ -128,7 +128,7 @@ router.patch("/:orderID", [auth], async (req, res) => {
         { new: true }
       );
 
-      res.json({ msg: "The order has been cancelled successfully." });
+      res.json({ msg: "The order has been cancelled." });
     }
   } catch (error) {
     res

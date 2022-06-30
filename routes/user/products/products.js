@@ -16,7 +16,7 @@ router.get("/category/:category", async (req, res) => {
         .json({ msg: "An error occurred. Please refresh the page." });
     } else {
       res.json({
-        msg: "All products fetched successfully.",
+        msg: "All products fetched.",
         products,
       });
     }

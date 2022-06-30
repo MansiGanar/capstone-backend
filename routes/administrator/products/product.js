@@ -19,7 +19,7 @@ router.get("/category/:category", async (req, res) => {
         .json({ msg: "An error occurred. Please refresh the page." });
     } else {
       res.json({
-        msg: "All products fetched successfully.",
+        msg: "All products fetched.",
         products,
       });
     }
@@ -43,7 +43,7 @@ router.get("/all", auth, async (req, res) => {
         .json({ msg: "An error occurred. Please refresh the page." });
     } else {
       res.json({
-        msg: "All products fetched successfully.",
+        msg: "All products fetched.",
         products,
       });
     }
@@ -96,7 +96,7 @@ router.post(
         await product.save();
 
         res.json({
-          msg: "Product added successfully.",
+          msg: "Product has been added.",
           product,
         });
       }
@@ -144,7 +144,7 @@ router.delete("/:productID", auth, async (req, res) => {
       await Product.findOneAndRemove({ productID: productID });
 
       res.json({
-        msg: "Product removed successfully.",
+        msg: "Product has been removed.",
       });
     }
   } catch (error) {
