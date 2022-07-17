@@ -48,4 +48,28 @@ router.get("/product/:productID", async (req, res) => {
   }
 });
 
+// @route       GET /api/users/products/all
+// @desc        Get all products
+// @access      Public
+router.get("/all", async (req, res) => {
+  try {
+    let products = await Product.find();
+
+    if (!products) {
+      res
+        .status(400)
+        .json({ msg: "An error occurred. Please refresh the page." });
+    } else {
+      res.json({
+        msg: "All products fetched.",
+        products,
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      msg: "Failed to fetch all products. Please refresh the page.",
+    });
+  }
+});
+
 export default router;
