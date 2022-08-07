@@ -14,15 +14,19 @@ const OrderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  deliveryAddress: {
+  streetName: {
     type: String,
     required: true,
   },
-  deliveryMethod: {
+  city: {
     type: String,
     required: true,
   },
-  paymentMethod: {
+  country: {
+    type: String,
+    required: true,
+  },
+  postalCode: {
     type: String,
     required: true,
   },
