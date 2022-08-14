@@ -34,6 +34,10 @@ const OrderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  deliveryMethod: {
+    type: String,
+    required: true,
+  },
   orderItems: { type: Array, required: true },
   date: { type: String, required: true },
   status: { type: String, required: true, default: "In progress" },

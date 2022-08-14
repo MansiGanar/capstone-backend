@@ -40,6 +40,7 @@ router.post(
     check("city", "Please enter city.").notEmpty(),
     check("country", "Please enter country.").notEmpty(),
     check("postalCode", "Please enter postal code.").notEmpty(),
+    check("deliveryMethod", "Please enter delivery method.").notEmpty(),
     check("orderItems", "Please enter orderItems.").notEmpty(),
   ],
   async (req, res) => {
@@ -58,6 +59,7 @@ router.post(
       country,
       postalCode,
       orderItems,
+      deliveryMethod,
     } = req.body;
 
     let now = `${moment().date()}/${moment().month() + 1}/${moment().year()}`;
@@ -76,6 +78,7 @@ router.post(
         date: now,
         status: "In progress",
         userId: req.user.id,
+        deliveryMethod,
       });
 
       await order.save();
