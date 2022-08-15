@@ -17,6 +17,14 @@ const AdministratorSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  resetPasswordToken: {
+    type: String,
+    default: null,
+  },
+  resetPasswordExpires: {
+    type: Date,
+    default: null,
+  },
 });
 
 const Administrator = mongoose.model("administrator", AdministratorSchema);

@@ -9,6 +9,7 @@ import productsAdmin from "./routes/administrator/products/product.js";
 import administrator from "./routes/administrator/administrator.js";
 import ordersAdmin from "./routes/administrator/orders/orders.js";
 import productsUser from "./routes/user/products/products.js";
+import emailService from "./routes/mails/emailService.js";
 
 const app = express();
 app.use(express.json());
@@ -39,6 +40,8 @@ app.use("/api/users/orders", ordersUser);
 app.use("/api/administrator", administrator);
 app.use("/api/administrator/products", productsAdmin);
 app.use("/api/administrator/orders", ordersAdmin);
+
+app.use("/api/emails", emailService);
 
 const PORT = process.env.PORT || 5000;
 
