@@ -22,9 +22,6 @@ connectDB();
 app.use(
   cors({
     origin: "*",
-    methods: "GET,PATCH,POST,DELETE",
-    preflightContinue: true,
-    optionsSuccessStatus: 204,
     credentials: true,
   })
 );
