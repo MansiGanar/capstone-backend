@@ -25,6 +25,7 @@ app.use(
     methods: "GET,PATCH,POST,DELETE",
     preflightContinue: true,
     optionsSuccessStatus: 204,
+    credentials: true,
   })
 );
 
