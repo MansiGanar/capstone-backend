@@ -119,7 +119,7 @@ router.post(
   }
 );
 
-// @route       PATCH /api/emails/reset-password/admin/:token
+// @route       PATCH /api/emails/update-password/admin/:token
 // @desc        Update password
 // @access      Public
 router.patch("/update-password/admin/:token", async (req, res) => {
@@ -223,7 +223,7 @@ router.post(
   }
 );
 
-// @route       PATCH /api/emails/reset-password/user/:token
+// @route       PATCH /api/emails/update-password/user/:token
 // @desc        Update password
 // @access      Public
 router.patch("/update-password/user/:token", async (req, res) => {
