@@ -269,10 +269,10 @@ router.patch("/update-password/user/:token", async (req, res) => {
 router.post(
   "/contact-form",
   [
-    check("name", "Please enter a name.").exists(),
+    check("name", "Please enter a name.").notEmpty(),
     check("email", "Please enter a valid email address.").isEmail(),
-    check("subject", "Please enter a subject.").exists(),
-    check("message", "Please enter a message.").exists(),
+    check("subject", "Please enter a subject.").notEmpty(),
+    check("message", "Please enter a message.").notEmpty(),
   ],
   (req, res) => {
     const errors = validationResult(req);
@@ -313,9 +313,9 @@ router.post(
 router.post(
   "/faq-form",
   [
-    check("name", "Please enter a name.").exists(),
-    check("subject", "Please enter a subject.").exists(),
-    check("message", "Please enter a message.").exists(),
+    check("name", "Please enter a name.").notEmpty(),
+    check("subject", "Please enter a subject.").notEmpty(),
+    check("message", "Please enter a message.").notEmpty(),
   ],
   (req, res) => {
     const errors = validationResult(req);
