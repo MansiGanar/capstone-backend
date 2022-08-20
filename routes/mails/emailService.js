@@ -6,6 +6,8 @@ import crypto from "crypto";
 import bcrypt from "bcryptjs";
 
 import {
+  contactFormEmailTemplate,
+  faqFormTemplate,
   newsletterSignupEmailTemplate,
   passwordResetEmailTemplate,
 } from "./template.js";
@@ -260,5 +262,92 @@ router.patch("/update-password/user/:token", async (req, res) => {
     });
   }
 });
+
+// @route       POST /api/emails/contact-form
+// @desc        Send an email when a user submits the contact form
+// @access      Public
+router.post(
+  "/contact-form",
+  [
+    check("name", "Please enter a name.").exists(),
+    check("email", "Please enter a valid email address.").isEmail(),
+    check("subject", "Please enter a subject.").exists(),
+    check("message", "Please enter a message.").exists(),
+  ],
+  (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { name, email, subject, message } = req.body;
+
+    let transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    let mailOptions = {
+      from: "comfydecoreurope@gmail.com",
+      to: "comfydecoreurope@gmail.com",
+      subject: `Contact Form`,
+      html: contactFormEmailTemplate({ name, email, subject, message }),
+    };
+
+    transporter.sendMail(mailOptions, function (err, info) {
+      if (err) {
+        res.json(err);
+      } else {
+        res.json(info);
+      }
+    });
+  }
+);
+
+// @route       POST /api/emails/faq-form
+// @desc        Send an email when a user submits the faq form
+// @access      Public
+router.post(
+  "/faq-form",
+  [
+    check("name", "Please enter a name.").exists(),
+    check("subject", "Please enter a subject.").exists(),
+    check("message", "Please enter a message.").exists(),
+  ],
+  (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { name, subject, message } = req.body;
+
+    let transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    let mailOptions = {
+      from: "comfydecoreurope@gmail.com",
+      to: "comfydecoreurope@gmail.com",
+      subject: `FAQ Form`,
+      html: faqFormTemplate({ name, subject, message }),
+    };
+
+    transporter.sendMail(mailOptions, function (err, info) {
+      if (err) {
+        res.json(err);
+      } else {
+        res.json(info);
+      }
+    });
+  }
+);
 
 export default router;
